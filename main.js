@@ -23,7 +23,8 @@ get(child(dbRef, `posiciones-guardadas/`)).then((snapshot) => {
   if (snapshot.exists()) {
     // console.log(Object.keys(snapshot.val()).length);
     //Obtiene el ultimo item guardado
-    console.log(snapshot.val()[Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]]);
+    let lastSavedItem = snapshot.val()[Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]];
+    console.log(lastSavedItem.arrayBanner);
   } else {
     console.log("No data available");
   }
