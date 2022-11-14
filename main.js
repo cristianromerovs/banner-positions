@@ -21,10 +21,12 @@ const db = getDatabase();
 const dbRef = ref(getDatabase());
 get(child(dbRef, `posiciones-guardadas/`)).then((snapshot) => {
   if (snapshot.exists()) {
-    // console.log(Object.keys(snapshot.val()).length);
     //Obtiene el ultimo item guardado
     let lastSavedItem = snapshot.val()[Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]];
-    console.log(lastSavedItem.arrayBanner);
+    console.log(lastSavedItem.arrayBanner.length);
+    for (let i = 0; i < lastSavedItem.arrayBanner.length; i++) {
+      listaElementos.innerHTML += `<li class="banner-tabs__item" data-id="${lastSavedItem.arrayBanner[i]}" data-title="${lastSavedItem.content[i]}">${lastSavedItem.content[i]}</li>`
+    }
   } else {
     console.log("No data available");
   }
@@ -32,27 +34,30 @@ get(child(dbRef, `posiciones-guardadas/`)).then((snapshot) => {
   console.error(error);
 });
 
-function writePositions(fechaActual, arrayBanner) {
+function writePositions(fechaActual, arrayBanner, content) {
   const reference = ref(db, 'posiciones-guardadas/' + fechaActual);
-
   set(reference, {
-    // cantItems: cantItems,
+    content: content,
     arrayBanner: arrayBanner
   });
 }
 
 let bannerNumber = document.querySelector(".current-banner span");
-let getAllItems = document.querySelectorAll(".banner-tabs__item")
 
-Sortable.create(lista, {
+let sortableList = Sortable.create(lista, {
   animation: 200,
   direction: "horizontal",
   group: "lista-elementos",
+  removeOnSpill: true,
+  revertOnSpill: false,
+  onSpill: function(/**Event*/evt) {
+		console.log(evt.item);
+	},
   onStart: (e) => {
     bannerNumber.textContent = ((e.oldDraggableIndex)+1);
-    console.log(`moviendo elemento ${((e.oldDraggableIndex)+1)}`);
   },
   onChoose: (e) => {
+    let getAllItems = document.querySelectorAll(".banner-tabs__item");
     getAllItems.forEach(item => {
       item.classList.remove("active");
     });
@@ -61,16 +66,29 @@ Sortable.create(lista, {
   },
   onEnd: (e) => {
     bannerNumber.textContent = ((e.newDraggableIndex)+1);
-    console.log(`dejado en ${((e.newDraggableIndex)+1)}`);
   },
   store: {
     set: (sortable) => {
       const orden = sortable.toArray();
-      // let getItemsInDom = document.querySelectorAll(".banner-tabs__item").length;
-      // Insertar en db
-      writePositions(getActualDate(), orden);
+      let dataContent = [];
+      let getItemsInDom = document.querySelectorAll(".banner-tabs__item");
+      getItemsInDom.forEach(el => {
+        dataContent.push(el.getAttribute("data-title"));
+      });
+      console.log(dataContent);
+      writePositions(getActualDate(), orden, dataContent);
     }
   }
+});
+
+let btnItem = document.getElementById("addNewItem");
+
+btnItem.addEventListener("click", () => {
+  let newItemName = document.getElementById("newItemName").value;
+  let getAllItems = document.querySelectorAll(".banner-tabs__item");
+  listaElementos.innerHTML += `<li class="banner-tabs__item" data-id="${(getAllItems.length)+1}" data-title="${newItemName}">${newItemName}</li>`
+  bannerNumber.textContent = (getAllItems.length)+1;
+  sortableList.save()
 });
 
 const getActualDate = () => {

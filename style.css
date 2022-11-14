@@ -1,5 +1,6 @@
 body {
   font-family: 'Barlow', sans-serif;
+  background-color: #fff;
 }
 
 ul, p {
@@ -44,6 +45,7 @@ ul.banner-tabs li.banner-tabs__item {
   cursor: pointer;
   border-right: 1px solid #002eff;
   flex-basis: 0;
+  cursor: move;
 }
 
 ul.banner-tabs li.banner-tabs__item.active {
@@ -57,4 +59,31 @@ ul.banner-tabs li:first-child {
 
 ul.banner-tabs li:last-child {
   border-right: 0;
+}
+
+.group-new-item {
+  background-color: #fff;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 25%);
+  border-radius: 16px;
+}
+
+.group-new-item input.input-new-item {
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  height: 32px;
+  width: 50%;
+  padding: 0px 20px;
+}
+
+.group-new-item .btn-new-item {
+  background-color: #002eff;
+  border-radius: 28px;
+  height: 32px;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  transition: .3s;
 }
