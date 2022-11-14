@@ -43,6 +43,7 @@ function writePositions(fechaActual, arrayBanner, content) {
 }
 
 let bannerNumber = document.querySelector(".current-banner span");
+let deleteArea = document.querySelector(".delete-area");
 
 let sortableList = Sortable.create(lista, {
   animation: 200,
@@ -63,6 +64,12 @@ let sortableList = Sortable.create(lista, {
     });
     e.item.classList.add("active");
     bannerNumber.textContent = ((e.oldDraggableIndex)+1);
+    deleteArea.classList.remove("d-none");
+    deleteArea.classList.add("d-flex");
+  },
+  onUnchoose: () => {
+    deleteArea.classList.remove("d-flex");
+    deleteArea.classList.add("d-none");
   },
   onEnd: (e) => {
     bannerNumber.textContent = ((e.newDraggableIndex)+1);

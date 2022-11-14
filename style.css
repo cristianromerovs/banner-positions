@@ -70,20 +70,41 @@ ul.banner-tabs li:last-child {
 .group-new-item input.input-new-item {
   border: 1px solid #ccc;
   border-radius: 16px;
-  height: 32px;
-  width: 50%;
+  height: 40px;
   padding: 0px 20px;
+  width: 100%;
+}
+
+.group-new-item .input-new-title {
+  font-weight: 500;
+  font-size: 1.3rem;
+  color: #191919;
 }
 
 .group-new-item .btn-new-item {
   background-color: #002eff;
   border-radius: 28px;
-  height: 32px;
-  width: 30%;
+  height: 40px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-weight: 600;
   transition: .3s;
+}
+
+.delete-area {
+  background-color: rgba(255, 0, 0, 0.3);
+  border: 2px solid red;
+  height: 250px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-area .delete-area__text {
+  font-size: 2rem;
+  color: #191919;
+  font-weight: 500;
 }
