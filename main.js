@@ -1,9 +1,11 @@
 import Sortable from 'sortablejs';
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, child, get } from "firebase/database";
-import './style.css'
+import './style.css';
 
-const listaElementos = document.getElementById("lista");
+document.addEventListener("dragover", (event) => {
+  event.preventDefault();
+});
 
 const firebaseConfig = {
   apiKey: "AIzaSyAEbiyzcVLGsu4PVUbycu2p86nmidzx-Ps",
@@ -17,7 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
-
+const listaElementos = document.getElementById("lista");
 const dbRef = ref(getDatabase());
 get(child(dbRef, `posiciones-guardadas/`)).then((snapshot) => {
   if (snapshot.exists()) {
@@ -56,6 +58,8 @@ let sortableList = Sortable.create(lista, {
 	},
   onStart: (e) => {
     bannerNumber.textContent = ((e.oldDraggableIndex)+1);
+    deleteArea.classList.remove("d-none");
+    deleteArea.classList.add("d-flex");
   },
   onChoose: (e) => {
     let getAllItems = document.querySelectorAll(".banner-tabs__item");
@@ -64,15 +68,13 @@ let sortableList = Sortable.create(lista, {
     });
     e.item.classList.add("active");
     bannerNumber.textContent = ((e.oldDraggableIndex)+1);
-    deleteArea.classList.remove("d-none");
-    deleteArea.classList.add("d-flex");
+    console.log(e.item);
   },
-  onUnchoose: () => {
-    deleteArea.classList.remove("d-flex");
-    deleteArea.classList.add("d-none");
-  },
+  onUnchoose: () => {},
   onEnd: (e) => {
     bannerNumber.textContent = ((e.newDraggableIndex)+1);
+    deleteArea.classList.remove("d-flex");
+    deleteArea.classList.add("d-none");
   },
   store: {
     set: (sortable) => {
@@ -95,7 +97,7 @@ btnItem.addEventListener("click", () => {
   let getAllItems = document.querySelectorAll(".banner-tabs__item");
   listaElementos.innerHTML += `<li class="banner-tabs__item" data-id="${(getAllItems.length)+1}" data-title="${newItemName}">${newItemName}</li>`
   bannerNumber.textContent = (getAllItems.length)+1;
-  sortableList.save()
+  sortableList.save();
 });
 
 const getActualDate = () => {
